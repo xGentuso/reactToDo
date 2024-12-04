@@ -1,10 +1,13 @@
 //import logo from './logo.svg';
 import './App.css';
 import React, { useState } from "react";
+import TodoBanner from './TodoBanner';
+import TodoRow from './TodoRow';
+import TodoCreator from './TodoCreator';
 
 function App() {
 
-  const [userName, setUserName] = useState("Adam");
+  const [userName] = useState("Adam"); // change 1
 
   const [todoItems, setTodoItems] = useState([
     { action: "Buy Flowers", done: false },
@@ -13,30 +16,30 @@ function App() {
     { action: "Call Joe", done: false }
   ]);
 
-  const [newItemText, setNewItemText] = useState("");
+  // const [newItemText, setNewItemText] = useState(""); // change 2
 
 
-  const changeStateData = () => {
-    setUserName((prevName) => (prevName === "Adam" ? "Bob" : "Adam"));
-  };
+  // const changeStateData = () => {
+  //  setUserName((prevName) => (prevName === "Adam" ? "Bob" : "Adam")); // change 3
+  // };
 
-  const updateNewTextValue = (event) => {
-    setNewItemText(event.target.value);
-  };
+  // const updateNewTextValue = (event) => {
+  //  setNewItemText(event.target.value); // change 4
+  // };
 
-  const createNewTodo = () => {
+  const createNewTodo = (task) => {
     if (!todoItems
-      .find(item => item.action === newItemText)) {
+      .find(item => item.action === task)) {
         setTodoItems([
           ...todoItems,
-          { action: newItemText, done: false}
+          { action: task, done: false}
         ]);
-        setNewItemText("");
+        // setNewItemText(""); // change 5
       }
-  }
+  };
 
   const toggleTodo = (todo) => {
-    setTodoItems(todoItems.map(item => 
+    setTodoItems(todoItems.map((item) => 
       item.action === todo.action
         ? { ...item, done: !item.done } 
         : item
@@ -44,44 +47,28 @@ function App() {
   };
 
   const todoTableRows = () => todoItems.map(item =>
-    <tr key={ item.action }>
-      <td>{ item.action }</td>
-      <td>
-        <input type="checkbox" checked={ item.done }
-          onChange={ () => toggleTodo(item) } />
-      </td>
-    </tr>
+    <TodoRow key={ item.action } item={ item } toggle={ toggleTodo } />
   )
 
   return (
     <div>
-      <h4 className="bg-primary text-white text-center p-2">
-        {userName}'s To Do List
-        ({todoItems.filter(t => !t.done).length} items to do)
-      </h4>
+      <TodoBanner userName={ userName } todoItems={ todoItems } />
 
-      <div className="container-fluid">
-        <div className="my-1">
-          <input className="form-control"
-            value={ newItemText }
-            onChange={ updateNewTextValue } />
-          <button className="btn btn-primary mt-1"
-            onClick={ createNewTodo }>
-            Add
-          </button>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Done</th>
-              </tr>
-            </thead>
-            <tbody>
-              { todoTableRows() }
-            </tbody>
-          </table>
-        </div>
+      <div className="m-3">
+        <TodoCreator callback={ createNewTodo } />
       </div>
+
+      <table className="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Done</th>
+          </tr>
+        </thead>
+        <tbody>
+          { todoTableRows() }
+        </tbody>
+      </table>
     </div>
   )
 };
