@@ -20,7 +20,7 @@ function TodoCreator({callback}) {
                 value={ newItemText }
                 onChange={ updateNewTextValue }
                 /> 
-            <button className="btn btn-primary mt-1" onClick={ createNewTodo }>
+            <button className="btn btn-primary my-1" onClick={ createNewTodo }>
                 Add
             </button>
         </div>
